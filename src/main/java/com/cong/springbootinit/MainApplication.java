@@ -1,5 +1,6 @@
 package com.cong.springbootinit;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,22 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class MainApplication {
 
     public static void main(String[] args) {
+        // 加载.env文件中的环境变量
+        try {
+            Dotenv dotenv = Dotenv.configure()
+                    .directory("./")  // .env文件所在目录
+                    .ignoreIfMalformed()  // 忽略格式错误的行
+                    .ignoreIfMissing()    // 如果文件不存在则忽略
+                    .load();
+            
+            // 将.env文件中的变量设置为系统属性
+            dotenv.entries().forEach(entry -> {
+                System.setProperty(entry.getKey(), entry.getValue());
+            });
+        } catch (Exception e) {
+            System.out.println("Warning: Could not load .env file: " + e.getMessage());
+        }
+        
         SpringApplication.run(MainApplication.class, args);
     }
 
