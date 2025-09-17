@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * ${dataName}视图
  *
- * @author <a href="https://github.com/lhccong">聪</a>
  */
 @Data
 public class ${upperDataKey}VO implements Serializable {

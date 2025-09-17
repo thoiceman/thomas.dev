@@ -1,6 +1,4 @@
 # 数据库初始化
-# @author <a href="https://github.com/lhccong">程序员聪</a>
-#
 
 -- 创建库
 create database if not exists my_db;

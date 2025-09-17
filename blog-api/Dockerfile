@@ -1,7 +1,4 @@
-# Docker 镜像构建
-# @author <a href="https://github.com/lhccong">程序员聪</a>
-#
-FROM maven:3.8.1-jdk-8-slim as builder
+FROM maven:3.5-jdk-8-alpine as builder
 
 # Copy local code to the container image.
 WORKDIR /app

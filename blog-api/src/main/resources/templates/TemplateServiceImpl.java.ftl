@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 /**
  * ${dataName}服务实现
  *
- * @author <a href="https://github.com/lhccong">聪</a>
 
  */
 @Service

@@ -1,15 +1,6 @@
 # Blog API 项目
 
-> 作者：[程序员聪](https://github.com/lhccong)
-
-基于 Java SpringBoot 的博客 API 项目，整合了常用框架和主流业务的示例代码。
-
-只需 1 分钟即可完成内容网站的后端！！！大家还可以在此基础上快速开发自己的项目。
-
-[toc]
-
-## 模板特点
-
+基于 Java SpringBoot 的博客 API 项目。
 ### 主流框架 & 特性
 
 - Spring Boot 2.7.x（贼新）
@@ -89,7 +80,7 @@ spring:
 
 2）执行 `sql/create_table.sql` 中的数据库语句，自动创建库表
 
-3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
+3）启动项目，访问 `http://localhost:8080/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
 
 ![](doc/swagger.png)
 
@@ -111,7 +102,7 @@ spring:
 ############### Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token 名称（同时也是 cookie 名称）
-  token-name: cong-sa-token
+  token-name: xu-sa-token
 ```
 
 
