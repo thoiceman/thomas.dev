@@ -41,12 +41,8 @@
 
 ## 业务功能
 
-- 提供示例 SQL（用户、帖子、帖子点赞、帖子收藏表）
+- 提供示例 SQL（用户表）
 - 用户登录、注册、注销、更新、检索、权限管理
-- 帖子创建、删除、编辑、更新、数据库检索、ES 灵活检索
-- 帖子点赞、取消点赞
-- 帖子收藏、取消收藏、检索已收藏帖子
-- 帖子全量同步 ES、增量同步 ES 定时任务
 - 支持分业务的文件上传
 
 ### 单元测试
@@ -116,22 +112,8 @@ spring:
     password: 123456
 ```
 
-2）复制 `sql/post_es_mapping.json` 文件中的内容，通过调用 Elasticsearch 的接口或者 Kibana Dev Tools 来创建索引（相当于数据库建表）
+### Elasticsearch 搜索引擎
 
-```
-PUT post_v1
-{
- 参数见 sql/post_es_mapping.json 文件
-}
-```
+1）修改 `application.yml` 的 Elasticsearch 配置为你自己的地址
 
-这步不会操作的话需要补充下 Elasticsearch 的知识，或者自行百度一下~
-
-3）开启同步任务，将数据库的帖子同步到 Elasticsearch
-
-找到 job 目录下的 `FullSyncPostToEs` 和 `IncSyncPostToEs` 文件，取消掉 `@Component` 注解的注释，再次执行程序即可触发同步：
-
-```java
-// todo 取消注释开启任务
-//@Component
-```
+2）Elasticsearch 现已移除帖子相关功能，如需使用请自行配置相关索引和映射

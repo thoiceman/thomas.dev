@@ -1,6 +1,5 @@
 package com.xu.blogapi.generate;
 
-import com.xu.blogapi.model.entity.Post;
 import com.xu.blogapi.model.entity.User;
 
 /**
@@ -20,7 +19,6 @@ public class CodeGenerator {
                 // 排除字段策略
                 .exclusionStrategy("serialVersionUID", "isDelete","updateTime","createTime")
                 // 继续追加process(数据类.class, "数据别名")
-                .process(Post.class, "帖子")
                 .process(User.class, "用户");
 
     }
