@@ -17,65 +17,102 @@ import lombok.Data;
 public class User implements Serializable {
 
     /**
-     * id
+     * 用户ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 用户账号
+     * 用户名
      */
-    private String userAccount;
+    @TableField("username")
+    private String username;
 
     /**
-     * 用户密码
+     * 邮箱
      */
-    private String userPassword;
+    @TableField("email")
+    private String email;
 
     /**
-     * 开放平台id
+     * 密码（加密存储，使用bcrypt等安全算法）
      */
-    private String unionId;
+    @TableField("password")
+    private String password;
 
     /**
-     * 公众号openId
+     * 昵称
      */
-    private String mpOpenId;
+    @TableField("nickname")
+    private String nickname;
 
     /**
-     * 用户昵称
+     * 头像URL
      */
-    private String userName;
+    @TableField("avatar")
+    private String avatar;
 
     /**
-     * 用户头像
+     * 个人简介
      */
-    private String userAvatar;
+    @TableField("bio")
+    private String bio;
 
     /**
-     * 用户简介
+     * 个人网站
      */
-    private String userProfile;
+    @TableField("website")
+    private String website;
 
     /**
-     * 用户角色：user/admin/ban
+     * GitHub用户名
      */
-    private String userRole;
+    @TableField("github")
+    private String github;
+
+    /**
+     * 角色：0-普通用户，1-管理员
+     */
+    @TableField("role")
+    private Integer role;
+
+    /**
+     * 状态：0-禁用，1-启用
+     */
+    @TableField("status")
+    private Integer status;
+
+    /**
+     * 最后登录时间
+     */
+    @TableField("last_login_time")
+    private Date lastLoginTime;
+
+    /**
+     * 最后登录IP（支持IPv6）
+     */
+    @TableField("last_login_ip")
+    private String lastLoginIp;
+
+
 
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private Date createTime;
 
     /**
      * 更新时间
      */
+    @TableField("update_time")
     private Date updateTime;
 
     /**
-     * 是否删除
+     * 是否删除：0-未删除，1-已删除
      */
     @TableLogic
+    @TableField("is_delete")
     private Integer isDelete;
 
     @TableField(exist = false)

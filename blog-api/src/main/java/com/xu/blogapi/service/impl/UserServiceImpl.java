@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xu.blogapi.common.ErrorCode;
-import com.xu.blogapi.config.GitHubConfig;
 import com.xu.blogapi.constant.CommonConstant;
 import com.xu.blogapi.constant.SystemConstants;
 import com.xu.blogapi.exception.BusinessException;
@@ -28,11 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
-import me.zhyd.oauth.model.AuthCallback;
-import me.zhyd.oauth.model.AuthResponse;
-import me.zhyd.oauth.model.AuthUser;
-import me.zhyd.oauth.request.AuthRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -46,8 +40,6 @@ import javax.annotation.Resource;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    @Resource
-    private GitHubConfig gitHubConfig;
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -68,7 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         synchronized (userAccount.intern()) {
             // 账户不能重复
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("userAccount", userAccount);
+            queryWrapper.eq("username", userAccount);
             long count = this.baseMapper.selectCount(queryWrapper);
             if (count > 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
@@ -77,8 +69,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
             // 3. 插入数据
             User user = new User();
-            user.setUserAccount(userAccount);
-            user.setUserPassword(encryptPassword);
+            user.setUsername(userAccount);
+            user.setPassword(encryptPassword);
+            // 设置默认邮箱，用户名@default.com
+            user.setEmail(userAccount + "@default.com");
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
@@ -103,8 +97,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
         // 查询用户是否存在
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userAccount", userAccount);
-        queryWrapper.eq("userPassword", encryptPassword);
+        queryWrapper.eq("username", userAccount);
+        queryWrapper.eq("password", encryptPassword);
         User user = this.baseMapper.selectOne(queryWrapper);
         // 用户不存在
         if (user == null) {
@@ -122,44 +116,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             return null;
         }
-        TokenLoginUserVo loginUserVO = new TokenLoginUserVo();
-        BeanUtils.copyProperties(user, loginUserVO);
-        //获取 Token  相关参数
+        TokenLoginUserVo tokenLoginUserVo = new TokenLoginUserVo();
+        BeanUtils.copyProperties(user, tokenLoginUserVo);
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-        loginUserVO.setSaTokenInfo(tokenInfo);
-        return loginUserVO;
-    }
-
-    @Override
-    public LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo) {
-        String unionId = wxOAuth2UserInfo.getUnionId();
-        String mpOpenId = wxOAuth2UserInfo.getOpenid();
-        // 单机锁
-        synchronized (unionId.intern()) {
-            // 查询用户是否已存在
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("unionId", unionId);
-            User user = this.getOne(queryWrapper);
-            // 被封号，禁止登录
-            if (user != null && UserRoleEnum.BAN.getValue().equals(user.getUserRole())) {
-                throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "该用户已被封，禁止登录");
-            }
-            // 用户不存在则创建
-            if (user == null) {
-                user = new User();
-                user.setUnionId(unionId);
-                user.setMpOpenId(mpOpenId);
-                user.setUserAvatar(wxOAuth2UserInfo.getHeadImgUrl());
-                user.setUserName(wxOAuth2UserInfo.getNickname());
-                boolean result = this.save(user);
-                if (!result) {
-                    throw new BusinessException(ErrorCode.SYSTEM_ERROR, "登录失败");
-                }
-            }
-            // 记录用户的登录态
-            StpUtil.getTokenSession().set(SystemConstants.USER_LOGIN_STATE, user);
-            return getLoginUserVO(user);
-        }
+        tokenLoginUserVo.setSaTokenInfo(tokenInfo);
+        return tokenLoginUserVo;
     }
 
     /**
@@ -219,7 +180,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean isAdmin(User user) {
-        return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
+        return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getRole());
     }
 
     /**
@@ -271,57 +232,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }
         Long id = userQueryRequest.getId();
-        String unionId = userQueryRequest.getUnionId();
-        String mpOpenId = userQueryRequest.getMpOpenId();
-        String userName = userQueryRequest.getUserName();
-        String userProfile = userQueryRequest.getUserProfile();
-        String userRole = userQueryRequest.getUserRole();
+        String username = userQueryRequest.getUsername();
+        String email = userQueryRequest.getEmail();
+        String nickname = userQueryRequest.getNickname();
+        Integer role = userQueryRequest.getRole();
+        Integer status = userQueryRequest.getStatus();
         String sortField = userQueryRequest.getSortField();
         String sortOrder = userQueryRequest.getSortOrder();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(id != null, "id", id);
-        queryWrapper.eq(StringUtils.isNotBlank(unionId), "unionId", unionId);
-        queryWrapper.eq(StringUtils.isNotBlank(mpOpenId), "mpOpenId", mpOpenId);
-        queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
-        queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
-        queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
+        queryWrapper.like(StringUtils.isNotBlank(username), "username", username);
+        queryWrapper.like(StringUtils.isNotBlank(email), "email", email);
+        queryWrapper.like(StringUtils.isNotBlank(nickname), "nickname", nickname);
+        queryWrapper.eq(role != null, "role", role);
+        queryWrapper.eq(status != null, "status", status);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
     }
 
-    @Override
-    public TokenLoginUserVo userLoginByGithub(AuthCallback callback) {
-        AuthRequest authRequest = gitHubConfig.getAuthRequest();
-        AuthResponse response = authRequest.login(callback);
-        // 获取用户信息
-        AuthUser authUser = (AuthUser) response.getData();
-        if (authUser == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"Github 登录失败，获取用户信息失败");
-        }
-        //判断用户是否存在
-        String userAccount = authUser.getUsername();
-
-        //1、用户不存在，则注册
-        User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getUserAccount, userAccount));
-        if (user == null) {
-            saveGithubUser(userAccount, authUser);
-        }
-        //2、用户存在，则登录
-        return this.userLogin(userAccount, authUser.getUuid()+authUser.getUsername());
-    }
-
-    private void saveGithubUser(String userAccount, AuthUser authUser) {
-        User user;
-        user = new User();
-        String defaultPassword = authUser.getUuid()+authUser.getUsername();
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + defaultPassword).getBytes());
-        user.setUserPassword(encryptPassword);
-        user.setUserAccount(userAccount);
-        user.setUserAvatar(authUser.getAvatar());
-        user.setUserProfile(authUser.getRemark());
-        user.setUserName(authUser.getNickname());
-        user.setUserRole(UserRoleEnum.USER.getValue());
-        this.save(user);
-    }
 }

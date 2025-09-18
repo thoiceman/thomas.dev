@@ -14,24 +14,34 @@ public class UserUpdateRequest implements Serializable {
     private Long id;
 
     /**
-     * 用户昵称
+     * 用户名
      */
-    private String userName;
+    private String username;
 
     /**
-     * 用户头像
+     * 邮箱
      */
-    private String userAvatar;
+    private String email;
 
     /**
-     * 简介
+     * 昵称
      */
-    private String userProfile;
+    private String nickname;
 
     /**
-     * 用户角色：user/admin/ban
+     * 头像URL
      */
-    private String userRole;
+    private String avatar;
+
+    /**
+     * 个人简介
+     */
+    private String bio;
+
+    /**
+     * 用户角色：0-普通用户 1-管理员 2-封禁用户
+     */
+    private Integer role;
 
     private static final long serialVersionUID = 1L;
 }

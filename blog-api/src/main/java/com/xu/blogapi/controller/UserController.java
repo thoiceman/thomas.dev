@@ -6,7 +6,6 @@ import com.xu.blogapi.common.BaseResponse;
 import com.xu.blogapi.common.DeleteRequest;
 import com.xu.blogapi.common.ErrorCode;
 import com.xu.blogapi.common.ResultUtils;
-import com.xu.blogapi.config.WxOpenConfig;
 import com.xu.blogapi.constant.UserConstant;
 import com.xu.blogapi.exception.BusinessException;
 import com.xu.blogapi.exception.ThrowUtils;
@@ -28,10 +27,6 @@ import javax.annotation.Resource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
-import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.zhyd.oauth.model.AuthCallback;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
@@ -56,9 +51,6 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @Resource
-    private WxOpenConfig wxOpenConfig;
-
     // region 登录相关
 
     /**
@@ -73,8 +65,8 @@ public class UserController {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String userAccount = userRegisterRequest.getUserAccount();
-        String userPassword = userRegisterRequest.getUserPassword();
+        String userAccount = userRegisterRequest.getUsername();
+        String userPassword = userRegisterRequest.getPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             return null;
@@ -87,61 +79,24 @@ public class UserController {
      * 用户登录
      *
      * @param userLoginRequest 用户登录请求
-     * @return {@link BaseResponse}<{@link LoginUserVO}>
+     * @return {@link BaseResponse}<{@link TokenLoginUserVo}>
      */
     @PostMapping("/login")
     @ApiOperation(value = "用户登录")
-    public BaseResponse<LoginUserVO> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
+    public BaseResponse<TokenLoginUserVo> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
         if (userLoginRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String userAccount = userLoginRequest.getUserAccount();
-        String userPassword = userLoginRequest.getUserPassword();
+        String userAccount = userLoginRequest.getUsername();
+        String userPassword = userLoginRequest.getPassword();
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            return null;
         }
-        LoginUserVO loginUserVO = userService.userLogin(userAccount, userPassword);
-        return ResultUtils.success(loginUserVO);
-    }
-
-    /**
-     * 用户登录（微信开放平台）
-     */
-    @GetMapping("/login/wx_open")
-    @ApiOperation(value = "用户登录（微信开放平台）")
-    public BaseResponse<LoginUserVO> userLoginByWxOpen(@RequestParam("code") String code) {
-        WxOAuth2AccessToken accessToken;
-        try {
-            WxMpService wxService = wxOpenConfig.getWxMpService();
-            accessToken = wxService.getOAuth2Service().getAccessToken(code);
-            WxOAuth2UserInfo userInfo = wxService.getOAuth2Service().getUserInfo(accessToken, code);
-            String unionId = userInfo.getUnionId();
-            String mpOpenId = userInfo.getOpenid();
-            if (StringUtils.isAnyBlank(unionId, mpOpenId)) {
-                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "登录失败，系统错误");
-            }
-            return ResultUtils.success(userService.userLoginByMpOpen(userInfo));
-        } catch (Exception e) {
-            log.error("userLoginByWxOpen error", e);
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "登录失败，系统错误");
-        }
-    }
-
-    /**
-     * 用户通过 GitHub 登录
-     * @param callback 回调
-     * @return {@link BaseResponse}<{@link TokenLoginUserVo}>
-     */
-    @PostMapping("/login/github")
-    @ApiOperation(value = "用户GitHub登录")
-    public BaseResponse<TokenLoginUserVo> userLoginByGithub(AuthCallback callback) {
-        if (callback.getCode() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"Github 登录失败，code 为空");
-        }
-        TokenLoginUserVo tokenLoginUserVo = userService.userLoginByGithub(callback);
+        TokenLoginUserVo tokenLoginUserVo = userService.userLogin(userAccount, userPassword);
         return ResultUtils.success(tokenLoginUserVo);
-
     }
+
+
 
     /**
      * 用户注销
@@ -187,10 +142,14 @@ public class UserController {
         }
         User user = new User();
         BeanUtils.copyProperties(userAddRequest, user);
+        // 如果没有提供email，设置默认邮箱
+        if (StringUtils.isBlank(user.getEmail())) {
+            user.setEmail(user.getUsername() + "@admin.com");
+        }
         // 默认密码 12345678
         String defaultPassword = "12345678";
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + defaultPassword).getBytes());
-        user.setUserPassword(encryptPassword);
+        user.setPassword(encryptPassword);
         boolean result = userService.save(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(user.getId());

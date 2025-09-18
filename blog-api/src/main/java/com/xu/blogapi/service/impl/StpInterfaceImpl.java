@@ -60,7 +60,7 @@ public class StpInterfaceImpl implements StpInterface {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         List<String> list = new ArrayList<>();
-        list.add(currentUser.getUserRole());
+        list.add(currentUser.getRole().toString());
         return list;
     }
 

@@ -10,9 +10,6 @@ import com.xu.blogapi.model.vo.UserVO;
 
 import java.util.List;
 
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
-import me.zhyd.oauth.model.AuthCallback;
-
 /**
  * 用户服务
  */
@@ -35,16 +32,7 @@ public interface UserService extends IService<User> {
      * @param userPassword 用户密码
      * @return 脱敏后的用户信息
      */
-    LoginUserVO userLogin(String userAccount, String userPassword);
-
-    /**
-     * 用户通过 MP Open 登录
-     * 用户登录（微信开放平台）
-     *
-     * @param wxOauth2UserInfo 从微信获取的用户信息
-     * @return 脱敏后的用户信息
-     */
-    LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOauth2UserInfo);
+    TokenLoginUserVo userLogin(String userAccount, String userPassword);
 
     /**
      * 获取当前登录用户
@@ -113,12 +101,4 @@ public interface UserService extends IService<User> {
      * @return {@link QueryWrapper}<{@link User}>
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
-
-    /**
-     * 用户通过 GitHub 登录
-     *
-     * @param callback 回调
-     * @return {@link TokenLoginUserVo }
-     */
-    TokenLoginUserVo userLoginByGithub(AuthCallback callback);
 }

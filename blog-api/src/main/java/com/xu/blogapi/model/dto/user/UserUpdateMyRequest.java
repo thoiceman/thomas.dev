@@ -10,19 +10,19 @@ import lombok.Data;
 public class UserUpdateMyRequest implements Serializable {
 
     /**
-     * 用户昵称
+     * 昵称
      */
-    private String userName;
+    private String nickname;
 
     /**
-     * 用户头像
+     * 头像URL
      */
-    private String userAvatar;
+    private String avatar;
 
     /**
-     * 简介
+     * 个人简介
      */
-    private String userProfile;
+    private String bio;
 
     private static final long serialVersionUID = 1L;
 }

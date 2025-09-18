@@ -1,9 +1,10 @@
 package com.xu.blogapi.model.dto.user;
 
 import com.xu.blogapi.common.PageRequest;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * 用户查询请求
@@ -11,35 +12,36 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserQueryRequest extends PageRequest implements Serializable {
+
     /**
-     * id
+     * 用户ID
      */
     private Long id;
 
     /**
-     * 开放平台id
+     * 用户名
      */
-    private String unionId;
+    private String username;
 
     /**
-     * 公众号openId
+     * 邮箱
      */
-    private String mpOpenId;
+    private String email;
 
     /**
-     * 用户昵称
+     * 昵称
      */
-    private String userName;
+    private String nickname;
 
     /**
-     * 简介
+     * 角色：0-普通用户，1-管理员
      */
-    private String userProfile;
+    private Integer role;
 
     /**
-     * 用户角色：user/admin/ban
+     * 状态：0-禁用，1-启用
      */
-    private String userRole;
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 }

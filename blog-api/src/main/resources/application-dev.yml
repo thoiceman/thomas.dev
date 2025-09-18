@@ -20,27 +20,7 @@ spring:
 #    uris: ${ES_URIS:http://localhost:9200}
 #    username: ${ES_USERNAME:root}
 #    password: ${ES_PASSWORD:123456}
-# 微信相关
-wx:
-  # 微信公众平台
-  # 使用环境变量配置
-  mp:
-    token: ${WX_MP_TOKEN:}
-    aesKey: ${WX_MP_AES_KEY:}
-    appId: ${WX_MP_APP_ID:}
-    secret: ${WX_MP_SECRET:}
-    config-storage:
-      http-client-type: HttpClient
-      key-prefix: wx
-      redis:
-        host: ${WX_REDIS_HOST:127.0.0.1}
-        port: ${WX_REDIS_PORT:6379}
-      type: Memory
-  # 微信开放平台
-  # 使用环境变量配置
-  open:
-    appId: ${WX_OPEN_APP_ID:}
-    appSecret: ${WX_OPEN_APP_SECRET:}
+
 # 对象存储
 # 使用环境变量配置
 cos:
@@ -49,12 +29,6 @@ cos:
     secretKey: ${COS_SECRET_KEY:}
     region: ${COS_REGION:}
     bucket: ${COS_BUCKET:}
-##登录相关
-############### Github 配置 ##############
-github:
-  client-id: ${GITHUB_CLIENT_ID:}
-  client-secret: ${GITHUB_CLIENT_SECRET:}
-  redirect-uri: ${GITHUB_REDIRECT_URI:}
 ############### Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token 名称（同时也是 cookie 名称）

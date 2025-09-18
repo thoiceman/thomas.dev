@@ -16,24 +16,39 @@ public class UserVO implements Serializable {
     private Long id;
 
     /**
-     * 用户昵称
+     * 用户名
      */
-    private String userName;
+    private String username;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
 
     /**
      * 用户头像
      */
-    private String userAvatar;
+    private String avatar;
 
     /**
-     * 用户简介
+     * 个人简介
      */
-    private String userProfile;
+    private String bio;
 
     /**
-     * 用户角色：user/admin/ban
+     * 个人网站
      */
-    private String userRole;
+    private String website;
+
+    /**
+     * GitHub用户名
+     */
+    private String github;
+
+    /**
+     * 角色：0-普通用户，1-管理员
+     */
+    private Integer role;
 
     /**
      * 创建时间
