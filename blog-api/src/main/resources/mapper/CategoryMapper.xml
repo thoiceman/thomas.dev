@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.blogapi.mapper.CategoryMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.xu.blogapi.model.entity.Category">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="slug" column="slug" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="LONGVARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="color" column="color" jdbcType="VARCHAR"/>
+        <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 分类文章数量统计结果映射 -->
+    <resultMap id="CategoryArticleCountResultMap" type="com.xu.blogapi.mapper.CategoryMapper$CategoryArticleCount">
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="articleCount" column="article_count" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        id, name, slug, description, icon, color, sort_order, status, create_time, update_time, is_delete
+    </sql>
+
+    <!-- 批量统计多个分类下的文章数量 -->
+    <select id="countArticlesByCategoryIds" resultMap="CategoryArticleCountResultMap">
+        SELECT 
+            category_id,
+            COUNT(*) as article_count
+        FROM article 
+        WHERE category_id IN
+        <foreach collection="categoryIds" item="categoryId" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+        AND is_delete = 0
+        GROUP BY category_id
+    </select>
+
+    <!-- 根据条件查询分类列表（支持模糊搜索） -->
+    <select id="selectCategoriesByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM category
+        WHERE is_delete = 0
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="slug != null and slug != ''">
+            AND slug = #{slug}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND (name LIKE CONCAT('%', #{searchText}, '%') 
+                 OR description LIKE CONCAT('%', #{searchText}, '%'))
+        </if>
+        <choose>
+            <when test="sortField != null and sortField != ''">
+                ORDER BY ${sortField}
+                <if test="sortOrder != null and sortOrder != ''">
+                    ${sortOrder}
+                </if>
+            </when>
+            <otherwise>
+                ORDER BY sort_order ASC, create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 检查分类别名是否存在 -->
+    <select id="existsBySlug" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM category
+        WHERE slug = #{slug}
+        AND is_delete = 0
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <!-- 检查分类名称是否存在 -->
+    <select id="existsByName" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM category
+        WHERE name = #{name}
+        AND is_delete = 0
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <!-- 获取最大排序权重 -->
+    <select id="getMaxSortOrder" resultType="java.lang.Integer">
+        SELECT COALESCE(MAX(sort_order), 0)
+        FROM category
+        WHERE is_delete = 0
+    </select>
+
+    <!-- 根据文章ID获取分类信息 -->
+    <select id="selectCategoryByArticleId" resultMap="BaseResultMap">
+        SELECT c.<include refid="Base_Column_List"/>
+        FROM category c
+        INNER JOIN article a ON c.id = a.category_id
+        WHERE a.id = #{articleId}
+        AND c.is_delete = 0
+        AND a.is_delete = 0
+    </select>
+
+    <!-- 批量更新文章的分类 -->
+    <update id="updateArticleCategory">
+        UPDATE article 
+        SET category_id = #{newCategoryId}, update_time = NOW()
+        WHERE category_id = #{oldCategoryId}
+        AND is_delete = 0
+    </update>
+
+    <!-- 清空指定分类下所有文章的分类关联 -->
+    <update id="clearArticleCategoryRelation">
+        UPDATE article 
+        SET category_id = NULL, update_time = NOW()
+        WHERE category_id = #{categoryId}
+        AND is_delete = 0
+    </update>
+
+    <!-- 获取分类下的文章列表（分页） -->
+    <select id="selectArticlesByCategoryId" resultType="java.lang.Long">
+        SELECT id
+        FROM article
+        WHERE category_id = #{categoryId}
+        AND is_delete = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY 
+        <choose>
+            <when test="sortField != null and sortField != ''">
+                ${sortField}
+                <if test="sortOrder != null and sortOrder != ''">
+                    ${sortOrder}
+                </if>
+            </when>
+            <otherwise>
+                is_top DESC, publish_time DESC, create_time DESC
+            </otherwise>
+        </choose>
+        <if test="limit != null and limit > 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+
+
+    <!-- 查询所有分类 -->
+    <select id="selectAllForTree" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM category
+        <where>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </where>
+        ORDER BY sort_order ASC, create_time ASC
+    </select>
+
+
+
+</mapper>
