@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.blogapi.mapper.ArticleMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.xu.blogapi.model.entity.Article">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="slug" property="slug" jdbcType="VARCHAR"/>
+        <result column="summary" property="summary" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+        <result column="cover_image" property="coverImage" jdbcType="VARCHAR"/>
+        <result column="category_id" property="categoryId" jdbcType="BIGINT"/>
+        <result column="author_id" property="authorId" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="is_top" property="isTop" jdbcType="TINYINT"/>
+        <result column="is_featured" property="isFeatured" jdbcType="TINYINT"/>
+        <result column="word_count" property="wordCount" jdbcType="INTEGER"/>
+        <result column="reading_time" property="readingTime" jdbcType="INTEGER"/>
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 列表查询结果映射（不包含content字段） -->
+    <resultMap id="ListResultMap" type="com.xu.blogapi.model.entity.Article">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="slug" property="slug" jdbcType="VARCHAR"/>
+        <result column="summary" property="summary" jdbcType="VARCHAR"/>
+        <result column="cover_image" property="coverImage" jdbcType="VARCHAR"/>
+        <result column="category_id" property="categoryId" jdbcType="BIGINT"/>
+        <result column="author_id" property="authorId" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="is_top" property="isTop" jdbcType="TINYINT"/>
+        <result column="is_featured" property="isFeatured" jdbcType="TINYINT"/>
+        <result column="word_count" property="wordCount" jdbcType="INTEGER"/>
+        <result column="reading_time" property="readingTime" jdbcType="INTEGER"/>
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 分页查询文章列表（不包含content字段） -->
+    <select id="selectArticleListPage" resultMap="ListResultMap">
+        SELECT 
+            id, title, slug, summary, cover_image, category_id, author_id,
+            status, is_top, is_featured, word_count, reading_time,
+            publish_time, create_time, update_time, is_delete
+        FROM article
+        WHERE is_delete = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="categoryId != null">
+            AND category_id = #{categoryId}
+        </if>
+        <if test="authorId != null">
+            AND author_id = #{authorId}
+        </if>
+        ORDER BY is_top DESC, publish_time DESC, create_time DESC
+    </select>
+
+    <!-- 根据slug查询文章 -->
+    <select id="selectBySlug" resultMap="BaseResultMap">
+        SELECT * FROM article 
+        WHERE slug = #{slug} AND is_delete = 0
+    </select>
+
+    <!-- 查询置顶文章列表 -->
+    <select id="selectTopArticles" resultMap="ListResultMap">
+        SELECT 
+            id, title, slug, summary, cover_image, category_id, author_id,
+            status, is_top, is_featured, word_count, reading_time,
+            publish_time, create_time, update_time, is_delete
+        FROM article
+        WHERE is_delete = 0 AND is_top = 1 AND status = 1
+        ORDER BY publish_time DESC, create_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!-- 查询精选文章列表 -->
+    <select id="selectFeaturedArticles" resultMap="ListResultMap">
+        SELECT 
+            id, title, slug, summary, cover_image, category_id, author_id,
+            status, is_top, is_featured, word_count, reading_time,
+            publish_time, create_time, update_time, is_delete
+        FROM article
+        WHERE is_delete = 0 AND is_featured = 1 AND status = 1
+        ORDER BY publish_time DESC, create_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!-- 更新文章字数和阅读时间 -->
+    <update id="updateWordCountAndReadingTime">
+        UPDATE article 
+        SET word_count = #{wordCount}, reading_time = #{readingTime}
+        WHERE id = #{id} AND is_delete = 0
+    </update>
+
+</mapper>
