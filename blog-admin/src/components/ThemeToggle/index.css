@@ -1,0 +1,125 @@
+/* 主题切换组件样式 */
+
+/* 按钮模式样式 */
+.theme-toggle-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 6px;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--ant-color-fill-tertiary);
+  transform: scale(1.05);
+}
+
+.theme-toggle-button .anticon {
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-button:hover .anticon {
+  transform: rotate(15deg);
+}
+
+/* 开关模式样式 */
+.theme-toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle-switch .anticon {
+  transition: all 0.3s ease;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.theme-toggle-switch .anticon.active {
+  opacity: 1;
+  color: var(--ant-color-primary);
+  transform: scale(1.1);
+}
+
+.theme-toggle-switch .ant-switch {
+  transition: all 0.3s ease;
+}
+
+/* 下拉菜单模式样式 */
+.theme-toggle-dropdown {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-dropdown:hover {
+  background-color: var(--ant-color-fill-tertiary);
+}
+
+/* 主题过渡效果 */
+.theme-transitioning * {
+  transition: background-color 0.3s ease, 
+              border-color 0.3s ease, 
+              color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}
+
+/* 暗色主题特定样式 */
+[data-theme="dark"] .theme-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .theme-toggle-dropdown:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* 亮色主题特定样式 */
+[data-theme="light"] .theme-toggle-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .theme-toggle-dropdown:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .theme-toggle-switch span {
+    display: none;
+  }
+  
+  .theme-toggle-dropdown .ant-btn {
+    padding: 4px 8px;
+  }
+}
+
+/* 动画效果 */
+@keyframes themeSwitch {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.theme-toggle-button.ant-btn-loading .anticon {
+  animation: themeSwitch 0.6s ease-in-out;
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .theme-toggle-button,
+  .theme-toggle-dropdown {
+    border: 1px solid var(--ant-color-border);
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle-button,
+  .theme-toggle-switch .anticon,
+  .theme-toggle-dropdown,
+  .theme-transitioning * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
