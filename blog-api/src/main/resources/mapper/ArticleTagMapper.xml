@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.blogapi.mapper.ArticleTagMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.xu.blogapi.model.entity.ArticleTag">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="articleId" column="article_id" jdbcType="BIGINT"/>
+        <result property="tagId" column="tag_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        id, article_id, tag_id, create_time
+    </sql>
+
+    <!-- 批量插入文章标签关联 -->
+    <insert id="batchInsert">
+        INSERT INTO article_tag (article_id, tag_id, create_time)
+        VALUES
+        <foreach collection="articleTagList" item="item" separator=",">
+            (#{item.articleId}, #{item.tagId}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量删除文章标签关联 -->
+    <delete id="batchDeleteByArticleIdAndTagIds">
+        DELETE FROM article_tag
+        WHERE article_id = #{articleId}
+        AND tag_id IN
+        <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+    </delete>
+
+    <!-- 查询热门标签的文章关联（按文章数量排序） -->
+    <select id="selectPopularTagIds" resultType="java.lang.Long">
+        SELECT tag_id
+        FROM article_tag
+        GROUP BY tag_id
+        ORDER BY COUNT(article_id) DESC
+        <if test="limit != null and limit > 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+</mapper>
