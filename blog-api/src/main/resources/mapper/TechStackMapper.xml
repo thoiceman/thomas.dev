@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.blogapi.mapper.TechStackMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.xu.blogapi.model.entity.TechStack">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="category" column="category" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="LONGVARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="officialUrl" column="official_url" jdbcType="VARCHAR"/>
+        <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        id, name, category, description, icon, official_url, sort_order, status, create_time, update_time, is_delete
+    </sql>
+
+    <!-- 根据条件查询技术栈列表（支持模糊搜索和排序） -->
+    <select id="selectTechStacksByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tech_stack
+        WHERE is_delete = 0
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND (name LIKE CONCAT('%', #{searchText}, '%') OR description LIKE CONCAT('%', #{searchText}, '%'))
+        </if>
+        <choose>
+            <when test="sortField != null and sortField != ''">
+                ORDER BY
+                <choose>
+                    <when test="sortField == 'name'">name</when>
+                    <when test="sortField == 'category'">category</when>
+                    <when test="sortField == 'sortOrder'">sort_order</when>
+                    <when test="sortField == 'status'">status</when>
+                    <when test="sortField == 'createTime'">create_time</when>
+                    <when test="sortField == 'updateTime'">update_time</when>
+                    <otherwise>sort_order</otherwise>
+                </choose>
+                <choose>
+                    <when test="sortOrder != null and sortOrder.toLowerCase() == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                ORDER BY category ASC, sort_order ASC, create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 检查技术名称是否已存在 -->
+    <select id="existsByName" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM tech_stack
+        WHERE name = #{name}
+        AND is_delete = 0
+    </select>
+
+    <!-- 检查技术名称是否已存在（排除指定ID） -->
+    <select id="existsByNameAndNotId" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM tech_stack
+        WHERE name = #{name}
+        AND id != #{excludeId}
+        AND is_delete = 0
+    </select>
+
+</mapper>
