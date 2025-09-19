@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.blogapi.mapper.ThoughtMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.xu.blogapi.model.entity.Thought">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="LONGVARCHAR"/>
+        <result property="images" column="images" jdbcType="VARCHAR" typeHandler="com.xu.blogapi.common.JsonListTypeHandler"/>
+        <result property="mood" column="mood" jdbcType="VARCHAR"/>
+        <result property="location" column="location" jdbcType="VARCHAR"/>
+        <result property="weather" column="weather" jdbcType="VARCHAR"/>
+        <result property="authorId" column="author_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        id, content, images, mood, location, weather, author_id, status, create_time, update_time, is_delete
+    </sql>
+
+    <!-- 根据条件查询想法列表（支持模糊搜索和排序） -->
+    <select id="selectThoughtsByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM thought
+        WHERE is_delete = 0
+        <if test="content != null and content != ''">
+            AND content LIKE CONCAT('%', #{content}, '%')
+        </if>
+        <if test="mood != null and mood != ''">
+            AND mood = #{mood}
+        </if>
+        <if test="location != null and location != ''">
+            AND location LIKE CONCAT('%', #{location}, '%')
+        </if>
+        <if test="weather != null and weather != ''">
+            AND weather = #{weather}
+        </if>
+        <if test="authorId != null">
+            AND author_id = #{authorId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND content LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+        <choose>
+            <when test="sortField != null and sortField != ''">
+                ORDER BY
+                <choose>
+                    <when test="sortField == 'content'">content</when>
+                    <when test="sortField == 'mood'">mood</when>
+                    <when test="sortField == 'location'">location</when>
+                    <when test="sortField == 'weather'">weather</when>
+                    <when test="sortField == 'authorId'">author_id</when>
+                    <when test="sortField == 'status'">status</when>
+                    <when test="sortField == 'createTime'">create_time</when>
+                    <when test="sortField == 'updateTime'">update_time</when>
+                    <otherwise>create_time</otherwise>
+                </choose>
+                <choose>
+                    <when test="sortOrder != null and sortOrder.toLowerCase() == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                ORDER BY create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

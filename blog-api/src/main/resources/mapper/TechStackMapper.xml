@@ -64,21 +64,4 @@
         </choose>
     </select>
 
-    <!-- 检查技术名称是否已存在 -->
-    <select id="existsByName" resultType="java.lang.Boolean">
-        SELECT COUNT(*) > 0
-        FROM tech_stack
-        WHERE name = #{name}
-        AND is_delete = 0
-    </select>
-
-    <!-- 检查技术名称是否已存在（排除指定ID） -->
-    <select id="existsByNameAndNotId" resultType="java.lang.Boolean">
-        SELECT COUNT(*) > 0
-        FROM tech_stack
-        WHERE name = #{name}
-        AND id != #{excludeId}
-        AND is_delete = 0
-    </select>
-
 </mapper>
