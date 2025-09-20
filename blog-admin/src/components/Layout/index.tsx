@@ -11,6 +11,7 @@ import {
   LogoutOutlined,
   BellOutlined,
   TeamOutlined,
+  TagsOutlined,
 } from '@ant-design/icons';
 import { ThemeToggle } from '../ThemeToggle';
 import { useTheme } from '../../hooks/useTheme';
@@ -37,6 +38,8 @@ interface AppLayoutProps {
   siderWidth?: number;
   collapsedWidth?: number;
   theme?: 'light' | 'dark';
+  selectedKeys?: string[];
+  openKeys?: string[];
 }
 
 // 默认菜单项
@@ -60,6 +63,11 @@ const defaultMenuItems: MenuProps['items'] = [
         label: '创建文章',
       },
     ],
+  },
+  {
+    key: 'categories',
+    icon: <TagsOutlined />,
+    label: '分类管理',
   },
   {
     key: 'users',
@@ -88,6 +96,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   siderWidth = 256,
   collapsedWidth = 80,
   theme: layoutTheme = 'light',
+  selectedKeys = [],
+  openKeys = [],
 }) => {
   // 侧边栏折叠状态
   const [collapsed, setCollapsed] = useState(false);
@@ -164,6 +174,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
           mode="inline"
           items={menuItems}
           onClick={handleMenuClick}
+          selectedKeys={selectedKeys}
+          openKeys={openKeys}
           className="app-layout-menu"
         />
       </Sider>

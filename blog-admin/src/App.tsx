@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, ConfigProvider, Card, Typography, Space, Tag, theme } from 'antd';
+import { RouterProvider } from 'react-router-dom';
 import zhCN from 'antd/locale/zh_CN';
 import { useAppSelector, useAppDispatch } from './hooks/redux';
-import { loginSuccess, logout } from './store/slices/authSlice';
+import { loginSuccess } from './store/slices/authSlice';
 import { useTheme, useThemeProvider } from './hooks/useTheme';
-import AppLayout from './components/Layout';
+import router from './router';
 import './App.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -38,24 +39,6 @@ function App() {
     }));
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
-  // 处理菜单点击
-  const handleMenuClick = (key: string) => {
-    console.log('菜单点击:', key);
-    // 这里可以添加路由跳转逻辑
-  };
-
-  // 处理用户菜单点击
-  const handleUserMenuClick = (key: string) => {
-    console.log('用户菜单点击:', key);
-    if (key === 'logout') {
-      handleLogout();
-    }
-  };
-
   // 未登录状态的登录页面
   if (!isAuthenticated) {
     return (
@@ -80,68 +63,14 @@ function App() {
     );
   }
 
-  // 已登录状态的主界面
+  // 已登录状态的主界面 - 使用路由
   return (
     <ConfigProvider 
       locale={zhCN} 
       theme={themeConfig}
     >
       <div className={isTransitioning ? 'theme-transitioning' : ''}>
-        <AppLayout
-          userInfo={{
-            name: user?.username || '管理员',
-            role: user?.role || 'Administrator',
-          }}
-          onMenuClick={handleMenuClick}
-          onUserMenuClick={handleUserMenuClick}
-        >
-        {/* 主要内容区域 */}
-        <div>
-          <Title level={2}>欢迎使用博客管理系统</Title>
-          
-          <Card title="系统概览" className="mb-6">
-            <Paragraph>
-              欢迎回来，<Text strong>{user?.username}</Text>！
-              这是一个基于现代技术栈构建的博客管理系统。
-            </Paragraph>
-            
-            <Title level={4}>已集成的技术栈：</Title>
-            <Space wrap>
-              <Tag color="blue">TypeScript</Tag>
-              <Tag color="green">Tailwind CSS</Tag>
-              <Tag color="purple">Ant Design</Tag>
-              <Tag color="red">Axios</Tag>
-              <Tag color="orange">Redux Toolkit</Tag>
-              <Tag color="cyan">React Router</Tag>
-            </Space>
-          </Card>
-
-          <Card title="布局组件特性" className="mb-6">
-            <Paragraph>
-              当前使用的布局组件具备以下特性：
-            </Paragraph>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              <li>响应式设计，适配移动端和桌面端</li>
-              <li>可折叠的侧边栏导航</li>
-              <li>支持主题定制（明亮/暗黑模式）</li>
-              <li>灵活的菜单配置</li>
-              <li>用户信息展示和操作</li>
-              <li>良好的可扩展性和自定义能力</li>
-            </ul>
-          </Card>
-
-          <Card title="快速开始">
-            <Paragraph>
-              你可以通过左侧导航菜单访问不同的功能模块：
-            </Paragraph>
-            <ul className="list-disc list-inside space-y-1 text-gray-700">
-              <li><Text strong>仪表盘</Text> - 查看系统概览和统计信息</li>
-              <li><Text strong>文章管理</Text> - 创建、编辑和管理博客文章</li>
-              <li><Text strong>用户管理</Text> - 管理系统用户和权限</li>
-            </ul>
-          </Card>
-        </div>
-      </AppLayout>
+        <RouterProvider router={router} />
       </div>
     </ConfigProvider>
   );
