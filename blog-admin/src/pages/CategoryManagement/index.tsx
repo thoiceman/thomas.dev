@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import CategoryList from '../components/CategoryManagement/CategoryList';
-import CategoryForm from '../components/CategoryManagement/CategoryForm';
-import type { Category } from '../types/category';
+import CategoryList from './CategoryList';
+import CategoryForm from './CategoryForm';
+import type { Category } from '../../types/category';
 
 /**
  * 分类管理页面

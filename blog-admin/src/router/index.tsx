@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import {
   Dashboard,
   CategoryManagement,
+  TagManagement,
   ArticleList,
   ArticleCreate,
   UserManagement
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: 'categories',
         element: <CategoryManagement />,
+      },
+      {
+        path: 'tags',
+        element: <TagManagement />,
       },
       {
         path: 'users',

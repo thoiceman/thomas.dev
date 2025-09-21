@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import userReducer from './slices/userSlice';
 import themeReducer from './slices/themeSlice';
 import categoryReducer from './slices/categorySlice';
+import tagReducer from './slices/tagSlice';
 
 // 配置Redux store
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     user: userReducer,
     theme: themeReducer,
     category: categoryReducer,
+    tag: tagReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
