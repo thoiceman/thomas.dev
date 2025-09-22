@@ -15,6 +15,7 @@ const routeKeyMap: Record<string, string> = {
   '/thoughts': 'thoughts',
   '/travels': 'travels',
   '/users': 'users',
+  '/projects': 'projects',
 };
 
 // 菜单键到路由的映射
@@ -28,6 +29,7 @@ const menuKeyToRoute: Record<string, string> = {
   'thoughts': '/thoughts',
   'travels': '/travels',
   'users': '/users',
+  'projects': '/projects',
 };
 
 const AppLayoutWithRouter: React.FC = () => {

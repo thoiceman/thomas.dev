@@ -9,7 +9,8 @@ import {
   TravelManagement,
   ArticleList,
   ArticleCreate,
-  UserManagement
+  UserManagement,
+  ProjectManagement
 } from '../pages';
 import AppLayoutWithRouter from '../components/Layout/AppLayoutWithRouter';
 
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: 'users',
         element: <UserManagement />,
+      },
+      {
+        path: 'projects',
+        element: <ProjectManagement />,
       },
     ],
   },
