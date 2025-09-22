@@ -6,6 +6,7 @@ import {
   TagManagement,
   TechStackManagement,
   ThoughtManagement,
+  TravelManagement,
   ArticleList,
   ArticleCreate,
   UserManagement
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
       {
         path: 'thoughts',
         element: <ThoughtManagement />,
+      },
+      {
+        path: 'travels',
+        element: <TravelManagement />,
       },
       {
         path: 'users',

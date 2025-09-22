@@ -15,6 +15,7 @@ import {
   TagOutlined,
   CodeOutlined,
   HeartOutlined,
+  CompassOutlined,
 } from '@ant-design/icons';
 import { ThemeToggle } from '../ThemeToggle';
 import { useTheme } from '../../hooks/useTheme';
@@ -86,6 +87,11 @@ const defaultMenuItems: MenuProps['items'] = [
     key: 'thoughts',
     icon: <HeartOutlined />,
     label: '想法管理',
+  },
+  {
+    key: 'travels',
+    icon: <CompassOutlined />,
+    label: '旅行记录',
   },
   {
     key: 'users',

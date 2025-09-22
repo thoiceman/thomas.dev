@@ -13,6 +13,7 @@ const routeKeyMap: Record<string, string> = {
   '/tags': 'tags',
   '/tech-stacks': 'tech-stacks',
   '/thoughts': 'thoughts',
+  '/travels': 'travels',
   '/users': 'users',
 };
 
@@ -25,6 +26,7 @@ const menuKeyToRoute: Record<string, string> = {
   'tags': '/tags',
   'tech-stacks': '/tech-stacks',
   'thoughts': '/thoughts',
+  'travels': '/travels',
   'users': '/users',
 };
 

@@ -8,6 +8,7 @@ export { default as CategoryManagement } from './CategoryManagement';
 export { default as TagManagement } from './TagManagement';
 export { default as TechStackManagement } from './TechStackManagement';
 export { default as ThoughtManagement } from './ThoughtManagement';
+export { default as TravelManagement } from './TravelManagement';
 export { default as ArticleList } from './ArticleList';
 export { default as ArticleCreate } from './ArticleCreate';
 export { default as UserManagement } from './UserManagement';
