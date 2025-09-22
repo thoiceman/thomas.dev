@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => (
         <li><Text strong>仪表盘</Text> - 查看系统概览和统计信息</li>
         <li><Text strong>文章管理</Text> - 创建、编辑和管理博客文章</li>
         <li><Text strong>分类管理</Text> - 管理博客分类和标签</li>
-        <li><Text strong>用户管理</Text> - 管理系统用户和权限</li>
+        <li><Text strong>项目管理</Text> - 管理技术项目和作品展示</li>
       </ul>
     </Card>
   </div>

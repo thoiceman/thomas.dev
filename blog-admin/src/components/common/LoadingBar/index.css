@@ -1,0 +1,147 @@
+/* 页面加载进度条样式 */
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--loading-bar-height, 3px);
+  background: transparent;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.loading-bar__progress {
+  height: 100%;
+  background: var(--loading-bar-color, #1890ff);
+  background: linear-gradient(
+    90deg,
+    var(--loading-bar-color, #1890ff) 0%,
+    rgba(24, 144, 255, 0.8) 50%,
+    var(--loading-bar-color, #1890ff) 100%
+  );
+  border-radius: 0 2px 2px 0;
+  position: relative;
+  transform-origin: left center;
+}
+
+.loading-bar__glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: loading-bar-glow 1.5s ease-in-out infinite;
+}
+
+.loading-bar--animating .loading-bar__progress {
+  box-shadow: 
+    0 0 10px rgba(24, 144, 255, 0.5),
+    0 0 5px rgba(24, 144, 255, 0.3);
+}
+
+.loading-bar--complete .loading-bar__progress {
+  transition: width var(--loading-bar-duration, 300ms) ease !important;
+}
+
+.loading-bar--complete .loading-bar__glow {
+  animation: none;
+  opacity: 0;
+}
+
+/* 发光动画 */
+@keyframes loading-bar-glow {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* 脉冲效果 */
+.loading-bar--animating .loading-bar__progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  animation: loading-bar-pulse 1s ease-in-out infinite;
+}
+
+@keyframes loading-bar-pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .loading-bar {
+    height: 2px;
+  }
+}
+
+/* 深色主题适配 */
+[data-theme='dark'] .loading-bar__progress {
+  background: linear-gradient(
+    90deg,
+    #177ddc 0%,
+    rgba(23, 125, 220, 0.8) 50%,
+    #177ddc 100%
+  );
+}
+
+[data-theme='dark'] .loading-bar--animating .loading-bar__progress {
+  box-shadow: 
+    0 0 10px rgba(23, 125, 220, 0.5),
+    0 0 5px rgba(23, 125, 220, 0.3);
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .loading-bar__progress {
+    background: #0066cc !important;
+  }
+  
+  .loading-bar__glow {
+    display: none;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .loading-bar__progress {
+    transition: none !important;
+  }
+  
+  .loading-bar__glow {
+    animation: none !important;
+  }
+  
+  .loading-bar--animating .loading-bar__progress::after {
+    animation: none !important;
+  }
+}

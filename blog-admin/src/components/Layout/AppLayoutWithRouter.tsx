@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { logout } from '../../store/slices/authSlice';
 import AppLayout from './index';
+import RouteLoadingProvider from '../common/RouteLoadingProvider';
 
 // 路由映射配置
 const routeKeyMap: Record<string, string> = {
@@ -14,7 +15,6 @@ const routeKeyMap: Record<string, string> = {
   '/tech-stacks': 'tech-stacks',
   '/thoughts': 'thoughts',
   '/travels': 'travels',
-  '/users': 'users',
   '/projects': 'projects',
 };
 
@@ -29,7 +29,6 @@ const menuKeyToRoute: Record<string, string> = {
   'tech-stacks': '/tech-stacks',
   'thoughts': '/thoughts',
   'travels': '/travels',
-  'users': '/users',
   'projects': '/projects',
 };
 
@@ -78,19 +77,28 @@ const AppLayoutWithRouter: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <AppLayout
-      userInfo={{
-        name: user?.username || '管理员',
-        role: user?.role || 'Administrator',
+    <RouteLoadingProvider
+      loadingBarProps={{
+        color: '#1890ff',
+        height: 3,
+        duration: 300,
+        hideDelay: 200,
       }}
-      onMenuClick={handleMenuClick}
-      onUserMenuClick={handleUserMenuClick}
-      selectedKeys={getSelectedKeys()}
-      openKeys={openKeys}
-      onOpenChange={handleOpenChange}
     >
-      <Outlet />
-    </AppLayout>
+      <AppLayout
+        userInfo={{
+          name: user?.username || '管理员',
+          role: user?.role || 'Administrator',
+        }}
+        onMenuClick={handleMenuClick}
+        onUserMenuClick={handleUserMenuClick}
+        selectedKeys={getSelectedKeys()}
+        openKeys={openKeys}
+        onOpenChange={handleOpenChange}
+      >
+        <Outlet />
+      </AppLayout>
+    </RouteLoadingProvider>
   );
 };
 

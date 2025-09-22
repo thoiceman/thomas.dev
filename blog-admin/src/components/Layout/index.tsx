@@ -100,11 +100,6 @@ const defaultMenuItems: MenuProps['items'] = [
     icon: <CompassOutlined />,
     label: '旅行记录',
   },
-  {
-    key: 'users',
-    icon: <TeamOutlined />,
-    label: '用户管理',
-  },
 ];
 
 // 默认用户信息
