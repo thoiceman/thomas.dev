@@ -13,6 +13,7 @@ import {
   TeamOutlined,
   TagsOutlined,
   TagOutlined,
+  CodeOutlined,
 } from '@ant-design/icons';
 import { ThemeToggle } from '../ThemeToggle';
 import { useTheme } from '../../hooks/useTheme';
@@ -74,6 +75,11 @@ const defaultMenuItems: MenuProps['items'] = [
     key: 'tags',
     icon: <TagOutlined />,
     label: '标签管理',
+  },
+  {
+    key: 'tech-stacks',
+    icon: <CodeOutlined />,
+    label: '技术栈管理',
   },
   {
     key: 'users',

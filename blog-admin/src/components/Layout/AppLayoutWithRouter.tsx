@@ -11,6 +11,7 @@ const routeKeyMap: Record<string, string> = {
   '/articles/create': 'article-create',
   '/categories': 'categories',
   '/tags': 'tags',
+  '/tech-stacks': 'tech-stacks',
   '/users': 'users',
 };
 
@@ -21,6 +22,7 @@ const menuKeyToRoute: Record<string, string> = {
   'article-create': '/articles/create',
   'categories': '/categories',
   'tags': '/tags',
+  'tech-stacks': '/tech-stacks',
   'users': '/users',
 };
 

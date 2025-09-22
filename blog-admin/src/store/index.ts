@@ -4,6 +4,7 @@ import userReducer from './slices/userSlice';
 import themeReducer from './slices/themeSlice';
 import categoryReducer from './slices/categorySlice';
 import tagReducer from './slices/tagSlice';
+import techStackReducer from './slices/techStackSlice';
 
 // 配置Redux store
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     theme: themeReducer,
     category: categoryReducer,
     tag: tagReducer,
+    techStack: techStackReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
