@@ -1,0 +1,258 @@
+/**
+ * Markdown 编辑器样式
+ */
+
+.markdown-editor-container {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.markdown-editor-container:hover {
+  border-color: #4096ff;
+}
+
+.markdown-editor-container:focus-within {
+  border-color: #4096ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+}
+
+/* 自定义工具栏样式 */
+.markdown-editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.markdown-editor-toolbar .ant-space {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.markdown-editor-toolbar .ant-btn {
+  border: none;
+  box-shadow: none;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.markdown-editor-toolbar .ant-btn:hover {
+  background: #e6f4ff;
+  color: #1677ff;
+}
+
+/* 统计信息样式 */
+.markdown-editor-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #666;
+}
+
+.markdown-editor-stats .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 全屏编辑器样式 */
+.markdown-editor-fullscreen {
+  height: 100%;
+}
+
+.markdown-editor-fullscreen .w-md-editor {
+  height: 100% !important;
+}
+
+.markdown-editor-fullscreen .w-md-editor-text-container {
+  height: calc(100% - 29px) !important;
+}
+
+.markdown-editor-fullscreen .w-md-editor-text,
+.markdown-editor-fullscreen .w-md-editor-preview {
+  height: 100% !important;
+}
+
+/* 编辑器主体样式覆盖 */
+.markdown-editor-container .w-md-editor {
+  background: transparent;
+  border: none;
+}
+
+.markdown-editor-container .w-md-editor-text-container {
+  border-radius: 0;
+}
+
+.markdown-editor-container .w-md-editor-text {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.markdown-editor-container .w-md-editor-text:focus {
+  box-shadow: none;
+}
+
+.markdown-editor-container .w-md-editor-preview {
+  padding: 12px;
+  background: #fff;
+}
+
+/* 预览内容样式 */
+.markdown-editor-container .w-md-editor-preview h1,
+.markdown-editor-container .w-md-editor-preview h2,
+.markdown-editor-container .w-md-editor-preview h3,
+.markdown-editor-container .w-md-editor-preview h4,
+.markdown-editor-container .w-md-editor-preview h5,
+.markdown-editor-container .w-md-editor-preview h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-editor-container .w-md-editor-preview h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-editor-container .w-md-editor-preview h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-editor-container .w-md-editor-preview p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.markdown-editor-container .w-md-editor-preview blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  margin: 0 0 16px 0;
+}
+
+.markdown-editor-container .w-md-editor-preview code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.markdown-editor-container .w-md-editor-preview pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.markdown-editor-container .w-md-editor-preview pre code {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+}
+
+.markdown-editor-container .w-md-editor-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+}
+
+.markdown-editor-container .w-md-editor-preview table {
+  border-collapse: collapse;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.markdown-editor-container .w-md-editor-preview table th,
+.markdown-editor-container .w-md-editor-preview table td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+.markdown-editor-container .w-md-editor-preview table th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+.markdown-editor-container .w-md-editor-preview table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/* 拖拽条样式 */
+.markdown-editor-container .w-md-editor-bar {
+  background: #f0f0f0;
+  cursor: col-resize;
+}
+
+.markdown-editor-container .w-md-editor-bar:hover {
+  background: #d9d9d9;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .markdown-editor-toolbar {
+    padding: 6px 8px;
+  }
+  
+  .markdown-editor-toolbar .ant-btn {
+    height: 24px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+  
+  .markdown-editor-stats {
+    gap: 8px;
+    font-size: 11px;
+  }
+  
+  .markdown-editor-container .w-md-editor-text,
+  .markdown-editor-container .w-md-editor-preview {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .markdown-editor-container {
+    border-color: #434343;
+    background: #1f1f1f;
+  }
+  
+  .markdown-editor-toolbar {
+    background: #2a2a2a;
+    border-bottom-color: #434343;
+  }
+  
+  .markdown-editor-container .w-md-editor-text {
+    background: #1f1f1f;
+    color: #e8e8e8;
+  }
+  
+  .markdown-editor-container .w-md-editor-preview {
+    background: #1f1f1f;
+    color: #e8e8e8;
+  }
+}

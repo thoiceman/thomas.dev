@@ -38,6 +38,7 @@ interface AppLayoutProps {
   };
   onMenuClick?: (key: string) => void;
   onUserMenuClick?: (key: string) => void;
+  onOpenChange?: (openKeys: string[]) => void; // 添加菜单展开状态变化处理函数
   className?: string;
   style?: React.CSSProperties;
   siderWidth?: number;
@@ -121,6 +122,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   userInfo = defaultUserInfo,
   onMenuClick,
   onUserMenuClick,
+  onOpenChange, // 添加onOpenChange参数
   className,
   style,
   siderWidth = 256,
@@ -204,6 +206,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
           mode="inline"
           items={menuItems}
           onClick={handleMenuClick}
+          onOpenChange={onOpenChange} // 添加展开状态变化处理
           selectedKeys={selectedKeys}
           openKeys={openKeys}
           className="app-layout-menu"

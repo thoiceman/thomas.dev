@@ -7,12 +7,13 @@ import {
   TechStackManagement,
   ThoughtManagement,
   TravelManagement,
-  ArticleList,
-  ArticleCreate,
   UserManagement,
   ProjectManagement
 } from '../pages';
 import AppLayoutWithRouter from '../components/Layout/AppLayoutWithRouter';
+import ArticleList from '../pages/ArticleManagement/ArticleList';
+import ArticleEditor from '../pages/ArticleManagement/ArticleEditor';
+import ArticleDetail from '../pages/ArticleManagement/ArticleDetail';
 
 // 创建路由配置
 export const router = createBrowserRouter([
@@ -41,7 +42,15 @@ export const router = createBrowserRouter([
           },
           {
             path: 'create',
-            element: <ArticleCreate />,
+            element: <ArticleEditor />,
+          },
+          {
+            path: 'editor/:id',
+            element: <ArticleEditor />,
+          },
+          {
+            path: 'detail/:id',
+            element: <ArticleDetail />,
           },
         ],
       },

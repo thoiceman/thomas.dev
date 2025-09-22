@@ -21,6 +21,7 @@ const routeKeyMap: Record<string, string> = {
 // 菜单键到路由的映射
 const menuKeyToRoute: Record<string, string> = {
   'dashboard': '/dashboard',
+  'articles': '/articles/list', // 添加文章管理父菜单的路由映射
   'article-list': '/articles/list',
   'article-create': '/articles/create',
   'categories': '/categories',
@@ -37,6 +38,9 @@ const AppLayoutWithRouter: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  
+  // 管理菜单展开状态
+  const [openKeys, setOpenKeys] = React.useState<string[]>([]);
 
   // 处理菜单点击，进行路由跳转
   const handleMenuClick = (key: string) => {
@@ -54,20 +58,24 @@ const AppLayoutWithRouter: React.FC = () => {
     }
   };
 
+  // 处理子菜单展开/收起
+  const handleOpenChange = (keys: string[]) => {
+    setOpenKeys(keys);
+  };
+
   // 获取当前选中的菜单项
   const getSelectedKeys = () => {
     const currentKey = routeKeyMap[location.pathname];
     return currentKey ? [currentKey] : [];
   };
 
-  // 获取当前展开的菜单项
-  const getOpenKeys = () => {
+  // 初始化展开状态
+  React.useEffect(() => {
     const pathname = location.pathname;
     if (pathname.startsWith('/articles')) {
-      return ['articles'];
+      setOpenKeys(['articles']);
     }
-    return [];
-  };
+  }, [location.pathname]);
 
   return (
     <AppLayout
@@ -78,7 +86,8 @@ const AppLayoutWithRouter: React.FC = () => {
       onMenuClick={handleMenuClick}
       onUserMenuClick={handleUserMenuClick}
       selectedKeys={getSelectedKeys()}
-      openKeys={getOpenKeys()}
+      openKeys={openKeys}
+      onOpenChange={handleOpenChange}
     >
       <Outlet />
     </AppLayout>

@@ -8,6 +8,7 @@ import techStackReducer from './slices/techStackSlice';
 import thoughtReducer from './slices/thoughtSlice';
 import travelReducer from './slices/travelSlice';
 import projectReducer from './slices/projectSlice';
+import articleReducer from './slices/articleSlice';
 
 // 配置Redux store
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
     thought: thoughtReducer,
     travel: travelReducer,
     project: projectReducer,
+    article: articleReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

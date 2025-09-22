@@ -1,0 +1,206 @@
+/* 文章管理主页面样式 */
+.article-management {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header .ant-typography-title {
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+.page-header .ant-typography-paragraph {
+  color: #8c8c8c;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/* 统计卡片行 */
+.stats-row .ant-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.stats-row .ant-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.stats-row .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 快速操作卡片 */
+.quick-actions {
+  margin: 24px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.action-card {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 160px;
+}
+
+.action-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.action-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.action-icon {
+  font-size: 32px;
+  color: #1890ff;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.action-content .ant-typography-title {
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+.action-content .ant-typography-paragraph {
+  color: #8c8c8c;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/* 最近活动区域 */
+.recent-articles {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.article-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.article-item:last-child {
+  border-bottom: none;
+}
+
+.article-info {
+  flex: 1;
+}
+
+.article-info .ant-typography-title {
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.article-info .ant-typography-paragraph {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+/* 图表占位符 */
+.chart-placeholder {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .article-management {
+    padding: 16px;
+  }
+  
+  .action-card {
+    height: 140px;
+  }
+  
+  .action-content {
+    padding: 16px;
+  }
+  
+  .action-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  
+  .article-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-row .ant-statistic-content {
+    font-size: 20px;
+  }
+  
+  .action-card {
+    height: 120px;
+  }
+  
+  .action-content {
+    padding: 12px;
+  }
+  
+  .action-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+}
+
+/* 暗色主题支持 */
+[data-theme='dark'] .article-management {
+  background: #141414;
+}
+
+[data-theme='dark'] .page-header .ant-typography-title {
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] .page-header .ant-typography-paragraph {
+  color: #a6a6a6;
+}
+
+[data-theme='dark'] .stats-row .ant-card,
+[data-theme='dark'] .quick-actions,
+[data-theme='dark'] .action-card {
+  background: #1f1f1f;
+  border-color: #303030;
+}
+
+[data-theme='dark'] .action-content .ant-typography-title {
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] .action-content .ant-typography-paragraph {
+  color: #a6a6a6;
+}
+
+[data-theme='dark'] .article-item {
+  border-bottom-color: #303030;
+}
+
+[data-theme='dark'] .chart-placeholder {
+  background: #262626;
+  color: #a6a6a6;
+}
