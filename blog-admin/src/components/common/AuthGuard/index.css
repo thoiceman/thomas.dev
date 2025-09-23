@@ -1,0 +1,316 @@
+/* 认证守卫加载状态 */
+.auth-guard-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 9999;
+}
+
+.auth-guard-loading .ant-spin {
+  color: white;
+}
+
+.auth-guard-loading .ant-spin-text {
+  color: white !important;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
+.auth-guard-loading .ant-spin-dot-item {
+  background-color: white;
+}
+
+/* 加载动画效果 */
+.auth-guard-loading::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: backgroundMove 20s linear infinite;
+}
+
+@keyframes backgroundMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* 权限错误提示 */
+.auth-guard-error {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  z-index: 9998;
+}
+
+.auth-guard-error-content {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 20px;
+}
+
+.auth-guard-error-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ff4d4f;
+  margin-bottom: 16px;
+}
+
+.auth-guard-error-message {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.auth-guard-error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.auth-guard-error-button {
+  padding: 8px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.auth-guard-error-button.primary {
+  background: #1890ff;
+  color: white;
+}
+
+.auth-guard-error-button.primary:hover {
+  background: #40a9ff;
+}
+
+.auth-guard-error-button.secondary {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.auth-guard-error-button.secondary:hover {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .auth-guard-loading .ant-spin-text {
+    font-size: 14px;
+  }
+  
+  .auth-guard-error-content {
+    padding: 30px 20px;
+    margin: 16px;
+  }
+  
+  .auth-guard-error-title {
+    font-size: 20px;
+  }
+  
+  .auth-guard-error-message {
+    font-size: 14px;
+  }
+  
+  .auth-guard-error-actions {
+    flex-direction: column;
+  }
+  
+  .auth-guard-error-button {
+    width: 100%;
+    padding: 12px 24px;
+  }
+}
+
+/* 权限提示动画 */
+.auth-guard-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 路由切换动画 */
+.auth-guard-route-transition {
+  animation: routeTransition 0.2s ease-in-out;
+}
+
+@keyframes routeTransition {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 加载骨架屏效果 */
+.auth-guard-skeleton {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f5f5f5;
+  z-index: 9997;
+}
+
+.auth-guard-skeleton-content {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.auth-guard-skeleton-header {
+  height: 60px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.auth-guard-skeleton-body {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 20px;
+}
+
+.auth-guard-skeleton-sidebar {
+  height: 400px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.auth-guard-skeleton-main {
+  height: 400px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 权限检查状态指示器 */
+.auth-guard-status {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.auth-guard-status.authenticated {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.auth-guard-status.unauthenticated {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.auth-guard-status.loading {
+  background: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+/* 开发模式下的调试信息 */
+.auth-guard-debug {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  max-width: 300px;
+  z-index: 1001;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.auth-guard-debug:hover {
+  opacity: 1;
+}
+
+.auth-guard-debug-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #ffd700;
+}
+
+.auth-guard-debug-item {
+  margin-bottom: 4px;
+}
+
+.auth-guard-debug-label {
+  color: #87ceeb;
+}
+
+.auth-guard-debug-value {
+  color: #98fb98;
+}
+
+/* 隐藏调试信息（生产环境） */
+.auth-guard-debug.hidden {
+  display: none;
+}

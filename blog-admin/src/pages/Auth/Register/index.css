@@ -1,0 +1,328 @@
+/* 注册页面容器 */
+.register-container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 背景层 */
+.register-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 1;
+}
+
+/* 背景动画效果 */
+.register-background::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: backgroundMove 20s linear infinite;
+}
+
+@keyframes backgroundMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* 背景遮罩 */
+.register-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+/* 内容区域 */
+.register-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
+}
+
+/* 注册卡片 */
+.register-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: cardSlideIn 0.6s ease-out;
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 注册头部 */
+.register-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.register-title {
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+  font-size: 28px !important;
+}
+
+.register-subtitle {
+  color: #666 !important;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 注册表单 */
+.register-form {
+  width: 100%;
+}
+
+.register-form .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.register-form .ant-input,
+.register-form .ant-input-password {
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.register-form .ant-input:hover,
+.register-form .ant-input-password:hover,
+.register-form .ant-input:focus,
+.register-form .ant-input-password:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.register-form .ant-input-affix-wrapper {
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.register-form .ant-input-affix-wrapper:hover,
+.register-form .ant-input-affix-wrapper-focused {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.register-form .site-form-item-icon {
+  color: #999;
+  font-size: 16px;
+}
+
+/* 注册按钮 */
+.register-button {
+  height: 48px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+}
+
+.register-button:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.register-button:active {
+  transform: translateY(0);
+}
+
+/* 复选框样式 */
+.register-form .ant-checkbox-wrapper {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.register-form .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+.register-form .ant-checkbox:hover .ant-checkbox-inner {
+  border-color: #667eea;
+}
+
+/* 链接样式 */
+.register-link {
+  color: #667eea !important;
+  text-decoration: none;
+  margin: 0 2px;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover {
+  color: #5a6fd8 !important;
+  text-decoration: underline;
+}
+
+/* 注册页脚 */
+.register-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.register-login-link {
+  color: #667eea !important;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 8px;
+  transition: color 0.3s ease;
+}
+
+.register-login-link:hover {
+  color: #5a6fd8 !important;
+  text-decoration: underline;
+}
+
+/* 表单验证错误样式 */
+.register-form .ant-form-item-has-error .ant-input,
+.register-form .ant-form-item-has-error .ant-input-affix-wrapper {
+  border-color: #ff4d4f;
+}
+
+.register-form .ant-form-item-has-error .ant-input:focus,
+.register-form .ant-form-item-has-error .ant-input-affix-wrapper-focused {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+}
+
+.register-form .ant-form-item-explain-error {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .register-content {
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .register-card {
+    padding: 30px 20px;
+    margin: 0;
+    border-radius: 12px;
+  }
+  
+  .register-title {
+    font-size: 24px !important;
+  }
+  
+  .register-form .ant-input,
+  .register-form .ant-input-password,
+  .register-button {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    padding: 24px 16px;
+  }
+  
+  .register-title {
+    font-size: 22px !important;
+  }
+  
+  .register-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* 加载状态 */
+.register-button.ant-btn-loading {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.register-button.ant-btn-loading:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: none;
+  box-shadow: none;
+}
+
+/* 密码强度提示 */
+.password-strength {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.password-strength.weak {
+  color: #ff4d4f;
+}
+
+.password-strength.medium {
+  color: #faad14;
+}
+
+.password-strength.strong {
+  color: #52c41a;
+}
+
+/* 表单项动画 */
+.register-form .ant-form-item {
+  animation: formItemSlideIn 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.register-form .ant-form-item:nth-child(1) { animation-delay: 0.1s; }
+.register-form .ant-form-item:nth-child(2) { animation-delay: 0.2s; }
+.register-form .ant-form-item:nth-child(3) { animation-delay: 0.3s; }
+.register-form .ant-form-item:nth-child(4) { animation-delay: 0.4s; }
+.register-form .ant-form-item:nth-child(5) { animation-delay: 0.5s; }
+.register-form .ant-form-item:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes formItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

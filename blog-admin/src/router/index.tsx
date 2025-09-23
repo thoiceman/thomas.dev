@@ -2,6 +2,7 @@ import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { createLazyComponent } from '../components/common/LazyWrapper';
 import AppLayoutWithRouter from '../components/Layout/AppLayoutWithRouter';
+import AuthGuard from '../components/common/AuthGuard';
 
 // 使用懒加载创建页面组件
 const Dashboard = createLazyComponent(() => import('../pages/Dashboard'), {
@@ -44,11 +45,71 @@ const ArticleDetail = createLazyComponent(() => import('../pages/ArticleManageme
   tip: '文章详情加载中...'
 });
 
+// 认证相关页面组件
+const Login = createLazyComponent(() => import('../pages/Auth/Login'), {
+  tip: '登录页面加载中...'
+});
+
+const Register = createLazyComponent(() => import('../pages/Auth/Register'), {
+  tip: '注册页面加载中...'
+});
+
+/**
+ * 受保护的路由组件
+ * 需要用户登录才能访问
+ */
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <AuthGuard requireAuth={true}>
+      {children}
+    </AuthGuard>
+  );
+};
+
+/**
+ * 公开路由组件
+ * 不需要用户登录即可访问
+ */
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <AuthGuard requireAuth={false}>
+      {children}
+    </AuthGuard>
+  );
+};
+
 // 创建路由配置
 export const router = createBrowserRouter([
+  // 认证相关路由（公开访问）
+  {
+    path: '/auth',
+    children: [
+      {
+        path: 'login',
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
+      },
+      {
+        path: 'register',
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
+      },
+    ],
+  },
+  // 主应用路由（需要认证）
   {
     path: '/',
-    element: <AppLayoutWithRouter />,
+    element: (
+      <ProtectedRoute>
+        <AppLayoutWithRouter />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -109,9 +170,10 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // 404 页面
   {
     path: '*',
-    element: <Navigate to="/dashboard" replace />,
+    element: <Navigate to="/auth/login" replace />,
   },
 ]);
 
